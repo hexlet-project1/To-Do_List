@@ -10,11 +10,14 @@ on:
       - "*"
 
 jobs:
-  test:
+  frontend-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         commands: [lint, prettier, jest]
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v4
       - name: install dependencies
