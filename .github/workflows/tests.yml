@@ -8,6 +8,9 @@ on:
   merge_group:
     branches:
       - "*"
+  push:
+    branches:
+      - "*"
 
 jobs:
   frontend-test:
