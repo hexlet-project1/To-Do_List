@@ -78,7 +78,6 @@ function createWindow() {
   })
   win.loadFile(path.join(__dirname, '../html/index.html'))
   win.removeMenu()
-  win.webContents.openDevTools()
   win.once('ready-to-show', () => {
     win.show()
   })
