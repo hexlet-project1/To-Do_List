@@ -1,5 +1,5 @@
 body {
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   background-color: #f4f4f4;
   padding: 20px;
   margin: 0;
@@ -43,7 +43,6 @@ body {
 #addTaskBtn:hover {
   background-color: #3e8e41;
 }
-
 
 #todo-list {
   list-style-type: none;
@@ -101,4 +100,3 @@ body {
 #todo-listt li button:hover {
   background-color: #c82333;
 }
-
