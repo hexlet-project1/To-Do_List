@@ -11,17 +11,22 @@
     <div id="task-control-container">
       <div>
         <form id="todo-form">
-          <input id="input-task-name" placeholder="Введите задачу" required maxlength="30" />
-          <input id="input-task-dueDate" type="date" required/>
+          <input
+            id="input-task-name"
+            placeholder="Введите задачу"
+            required
+            maxlength="30"
+          />
+          <input id="input-task-dueDate" type="date" required />
           <button id="addTaskBtn">Добавить</button>
-        </form> 
+        </form>
       </div>
       <select id="todo-filter">
         <option value="all">Все</option>
         <option value="active">Активные</option>
         <option value="completed">Завершенные</option>
       </select>
-      <ul id="todo-list"></ul>  
+      <ul id="todo-list"></ul>
     </div>
     <script type="module" src="../js/renderer.js"></script>
   </body>
