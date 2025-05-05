@@ -4,11 +4,7 @@ app = Flask(__name__)
 
 allowed_fields = ['id', 'text', 'dueDate', 'completed']
 
-todos = [{"text": "5555","id": 1,
-        "dueDate":"202",
-        "completed": False}, {"text": "11111", "id": 2,
-        "dueDate":"2021",
-        "completed": True}]
+todos = []
 
 @app.route('/todos', methods=['GET'])
 def get_todos():
