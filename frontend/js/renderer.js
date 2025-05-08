@@ -2,10 +2,14 @@ import TodoModel from './todo-model.js'
 import TodoView from './todo-view.js'
 import TodoController from './todo-controller.js'
 
+const controller = new TodoController()
 const model = new TodoModel()
 const view = new TodoView()
-const controller = new TodoController(model, view)
+controller.model = model
+model.view = view
+view.controller = controller
 
 window.onload = () => {
-  controller.initialize()
+  view.initialize()
+  model.initialize()
 }

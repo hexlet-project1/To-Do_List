@@ -4,41 +4,45 @@ export default class TodoView {
     this.form = taskControlContainer.querySelector('#todo-form')
     this.input = this.form.querySelector('#input-task-name')
     this.dueDate = this.form.querySelector('#input-task-dueDate')
+    this.editTaskBtn = this.form.querySelector('#editTaskBtn')
     this.list = taskControlContainer.querySelector('#todo-list')
     this.filter = taskControlContainer.querySelector('#todo-filter')
     this.error = taskControlContainer.querySelector('#error-message')
   }
 
   initialize() {
-    const today = new Date().toISOString().split('T')[0]
-    this.dueDate.min = today
+    this.bindSetDataTodo(this.controller.handleSetDataTodo.bind(this.controller))
+    this.bindToggleCompleteTodo(this.controller.handleToggleCompleteTodo.bind(this.controller))
+    this.bindDeleteTodo(this.controller.handleDeleteTodo.bind(this.controller))
+    this.bindFilterChange(this.controller.handleFilterChange.bind(this.controller))
+    this.bindEditTodo(this.controller.handleEditTodo.bind(this.controller))
+    this.dueDate.min = this.controller.getDate()
     this.dueDate.max = '2999-12-31'
   }
 
-  bindAddTodo(handler) {
+  bindSetDataTodo(handler) {
     this.form.addEventListener('submit', (e) => {
       e.preventDefault()
+      const id = e.target.dataset.id ?? null
       const text = this.input.value.trim()
       const date = this.dueDate.value
-      handler(text, date)
+      handler(id, text, date)
     })
   }
 
-  bindToggleTodo(handler) {
+  bindToggleCompleteTodo(handler) {
     this.list.addEventListener('click', (e) => {
-      if (e.target.classList.contains('toggle')) {
-        const id = Number(e.target.dataset.id)
-        handler(id)
-      }
+      const classList = e.target.classList
+      const id = Number(e.target.dataset.id)
+      handler(id, classList)
     })
   }
 
   bindDeleteTodo(handler) {
     this.list.addEventListener('click', (e) => {
-      if (e.target.classList.contains('delete')) {
-        const id = Number(e.target.dataset.id)
-        handler(id)
-      }
+      const classList = e.target.classList
+      const id = Number(e.target.dataset.id)
+      handler(id, classList)
     })
   }
 
@@ -48,9 +52,33 @@ export default class TodoView {
     })
   }
 
+  bindEditTodo(handler) {
+    this.list.addEventListener('click', (e) => {
+      const classList = e.target.classList
+      const id = Number(e.target.dataset.id)
+      handler(id, classList)
+    })
+  }
+
   clearForm() {
     this.input.value = ''
     this.dueDate.value = ''
+  }
+
+  changeEdit(todo, isPrecious) {
+    const li = this.list.querySelector(`li[data-id="${todo.id}"]`)
+    if (isPrecious) {
+      li.classList.add('focusedTodo')
+      this.input.value = ''
+      this.dueDate.value = ''
+      this.editTaskBtn.textContent = 'Добавить'
+    }
+    else {
+      li.classList.remove('focusedTodo')
+      this.input.value = todo.text
+      this.dueDate.value = todo.dueDate
+      this.editTaskBtn.textContent = 'Обновить'
+    }
   }
 
   renderTodos(todos) {
@@ -81,6 +109,11 @@ export default class TodoView {
         content.appendChild(text)
         content.appendChild(date)
 
+        const editBtn = document.createElement('button')
+        editBtn.textContent = '✎'
+        editBtn.className = 'edit'
+        editBtn.dataset.id = todo.id
+
         const deleteBtn = document.createElement('button')
         deleteBtn.textContent = 'Удалить'
         deleteBtn.className = 'delete'
@@ -88,6 +121,7 @@ export default class TodoView {
 
         li.appendChild(checkbox)
         li.appendChild(content)
+        li.appendChild(editBtn)
         li.appendChild(deleteBtn)
 
         this.list.appendChild(li)

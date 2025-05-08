@@ -40,14 +40,14 @@ function waitForBackendReady() {
   const maxRetries = 30
   const delay = 1000
   let attempts = 0
-
   return new Promise((resolve, reject) => {
     const check = () => {
-      http.get('http://127.0.0.1:5000/todos', (res) => {
+      http.get('http://127.0.0.1:6432/todos', (res) => {
         if (res.statusCode === 200) {
           resolve()
         }
         else {
+          console.log('retry')
           retry()
         }
       }).on('error', retry)
@@ -78,6 +78,7 @@ function createWindow() {
   })
   win.loadFile(path.join(__dirname, '../html/index.html'))
   win.removeMenu()
+  win.webContents.openDevTools()
   win.once('ready-to-show', () => {
     win.show()
   })
@@ -86,6 +87,7 @@ function createWindow() {
 app.whenReady().then(async () => {
   startBackend()
   await waitForBackendReady()
+  console.log('rdy')
   createWindow()
 
   app.on('window-all-closed', () => {

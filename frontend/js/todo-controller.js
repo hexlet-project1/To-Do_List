@@ -1,59 +1,39 @@
 export default class TodoController {
-  constructor(model, view) {
-    this.model = model
-    this.view = view
-    this.filter = 'all'
-  }
-
-  initialize() {
-    this.view.initialize()
-    this.view.renderTodos(this.model.getTodos())
-    this.view.bindAddTodo(this.handleAddTodo.bind(this))
-    this.view.bindToggleTodo(this.handleToggleTodo.bind(this))
-    this.view.bindDeleteTodo(this.handleDeleteTodo.bind(this))
-    this.view.bindFilterChange(this.handleFilterChange.bind(this))
-    this.loadTodos()
-  }
-
-  async handleAddTodo(text, date) {
+  async handleSetDataTodo(id, text, date) {
     const trimmedText = text.trim()
     const isDuplicate = this.model.todos.some(
       todo => todo.text.toLowerCase() === trimmedText.toLowerCase() && todo.dueDate === date,
     )
     if (!isDuplicate) {
-      await this.model.addTodo(trimmedText, date)
+      if (this.model.editingId) {
+        await this.model.updateTodo(id, text, date)
+      }
+      else {
+        await this.model.addTodo(text, date)
+      }
     }
-    this.view.clearForm()
-    this.updateView()
+    else {
+      this.model.view.clearForm()
+    }
   }
 
-  async handleToggleTodo(id) {
-    await this.model.toggleTodo(id)
-    this.updateView()
+  async handleToggleCompleteTodo(id, classList) {
+    if (classList.contains('toggle')) await this.model.toggleCompleteTodo(id)
   }
 
-  async handleDeleteTodo(id) {
-    await this.model.deleteTodo(id)
-    this.updateView()
+  async handleDeleteTodo(id, classList) {
+    if (classList.contains('delete')) await this.model.deleteTodo(id)
   }
 
   handleFilterChange(filter) {
-    this.filter = filter
-    this.updateView()
+    this.model.changeFilter(filter)
   }
 
-  async loadTodos() {
-    try {
-      await this.model.fetchTodos()
-      this.view.renderTodos(this.model.getTodos())
-    }
-    catch {
-      throw new Error('Не удалось загрузить todos...')
-    }
+  async handleEditTodo(id, classList) {
+    if (classList.contains('edit')) this.model.changeEditTodo(id)
   }
 
-  updateView() {
-    const todos = this.model.getTodos(this.filter)
-    this.view.renderTodos(todos)
+  getDate() {
+    return new Date().toISOString().split('T')[0]
   }
 }

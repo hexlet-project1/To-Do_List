@@ -1,6 +1,6 @@
 body {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  background-color: #f4f4f4;
+  background-color: #f1e8e8;
   padding: 20px;
   margin: 0;
 }
@@ -22,7 +22,7 @@ body {
   width: 100%;
   min-height: 82vh;
   margin: 0 auto 20px auto;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(21, 21, 21, 0.15);
 }
 
 #task-control-container > * {
@@ -31,16 +31,16 @@ body {
   font-size: 1rem;
   border-radius: 4px;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: 1px solid #dad8d8;
 }
 
-#addTaskBtn {
+#editTaskBtn {
   background-color: #4caf50;
-  color: white;
+  color: rgb(246, 244, 244);
   border: none;
 }
 
-#addTaskBtn:hover {
+#editTaskBtn:hover {
   background-color: #3e8e41;
 }
 
@@ -55,7 +55,7 @@ body {
 }
 
 #todo-list li {
-  background-color: #fff;
+  background-color: #f8f5f5;
   padding: 10px;
   margin: 5px 0;
   border-radius: 4px;
@@ -63,9 +63,11 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(9, 9, 9, 0.1);
 }
-
+.focusedTodo {
+  background-color: #dc8b21;
+}
 .todo-content {
   display: flex;
   flex-direction: column;
@@ -77,10 +79,6 @@ body {
 .todo-text {
   flex-grow: 1;
   word-break: break-word;
-}
-
-.todo-date {
-  margin-top: 5px;
 }
 
 #todo-list li.completed {

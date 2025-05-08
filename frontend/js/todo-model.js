@@ -2,6 +2,12 @@ export default class TodoModel {
   constructor() {
     this.todos = []
     this.currentId = 1
+    this.tempId = null
+    this.filter = 'all'
+  }
+
+  async initialize() {
+    await this.fetchTodos()
   }
 
   async fetchTodos() {
@@ -17,6 +23,7 @@ export default class TodoModel {
       if (this.todos.length > 0) {
         this.currentId = Math.max(...this.todos.map(t => t.id)) + 1
       }
+      this.view.renderTodos(this.getTodos())
     }
     catch {
       throw new Error('Ошибка при загрузке задач с сервера')
@@ -32,7 +39,7 @@ export default class TodoModel {
         completed: false,
       }
 
-      const response = await fetch('http://127.0.0.1:6432/todos', {
+      const response = await fetch(`http://127.0.0.1:6432/todos/${this.currentId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,13 +52,19 @@ export default class TodoModel {
       }
       this.currentId += 1
       this.todos.push(newTodo)
+      this.view.clearForm()
+      this.view.renderTodos(this.getTodos())
     }
     catch {
       throw new Error('Ошибка при добавлении задачи')
     }
   }
 
-  async toggleTodo(id) {
+  editTodo() {
+    //
+  }
+
+  async toggleCompleteTodo(id) {
     const todo = this.todos.find(t => t.id === id)
     if (todo) {
       try {
@@ -68,10 +81,46 @@ export default class TodoModel {
           throw new Error('Не удалось обновить задачу на сервере')
         }
         todo.completed = !todo.completed
+        this.view.renderTodos(this.getTodos())
       }
       catch {
         throw new Error('Ошибка при обновлении задачи')
       }
+    }
+  }
+
+  changeEditTodo(id) {
+    if (this.tempId === this.currentId) {
+      this.currentId = this.tempId
+      this.tempId = null
+    }
+    else {
+      this.tempId = this.currentId
+      this.currentId = id
+    }
+    const todo = this.todos.find(t => t.id === id)
+    this.view.changeEdit(todo, this.tempId === null)
+  }
+
+  async updateTodo(id, fetchBody) {
+    try {
+      const response = await fetch(`http://127.0.0.1:6432/todos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fetchBody),
+      })
+      if (!response.ok) {
+        throw new Error('Не удалось обновить задачу на сервере')
+      }
+      const itemI = this.todos.indexOf(t => t.id !== id)
+      this.todos[itemI] = { ...this.todos[itemI], ...fetchBody }
+      this.view.clearForm()
+      this.view.renderTodos(this.getTodos())
+    }
+    catch {
+      throw new Error('Ошибка при обновлении задачи')
     }
   }
 
@@ -84,14 +133,15 @@ export default class TodoModel {
         throw new Error('Не удалось удалить задачу на сервере')
       }
       this.todos = this.todos.filter(t => t.id !== id)
+      this.view.renderTodos(this.getTodos())
     }
     catch {
       throw new Error('Ошибка при удалении задачи')
     }
   }
 
-  getTodos(filter = 'all') {
-    switch (filter) {
+  getTodos() {
+    switch (this.filter) {
       case 'completed':
         return this.todos.filter(t => t.completed)
       case 'active':
@@ -99,5 +149,13 @@ export default class TodoModel {
       default:
         return [...this.todos]
     }
+  }
+
+  setEditingId(id) {
+    this.editingId = id
+  }
+
+  changeFilter(filter) {
+    this.filter = filter
   }
 }
