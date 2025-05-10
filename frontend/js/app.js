@@ -14,11 +14,11 @@ function startBackend() {
   const backendDir = path.resolve(__dirname, '../../backend')
   const mainPy = path.join(backendDir, 'main.py')
 
-  const uvExecutable = process.platform === 'win32'
-    ? path.join(backendDir, '.venv', 'Scripts', 'uv.exe')
-    : path.join(backendDir, '.venv', 'bin', 'uv')
+  const pyExecutable = process.platform === 'win32'
+    ? path.join(backendDir, '.venv', 'Scripts', 'python.exe')
+    : path.join(backendDir, '.venv', 'bin', 'python')
 
-  backendProcess = spawn(uvExecutable, ['run', mainPy], {
+  backendProcess = spawn(pyExecutable, [mainPy], {
     cwd: backendDir,
     stdio: 'inherit',
     shell: false,
