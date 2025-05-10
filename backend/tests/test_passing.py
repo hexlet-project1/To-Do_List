@@ -1,0 +1,2 @@
+def passing():
+    assert True
