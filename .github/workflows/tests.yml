@@ -1,0 +1,44 @@
+name: tests
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+    branches:
+      - "*"
+  merge_group:
+    branches:
+      - "*"
+  push:
+    branches:
+      - "*"
+
+jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        commands: [lint, prettier, jest]
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: install dependencies
+        run: make setup
+      - name: ${{ matrix.commands }}
+        run: npm run ${{ matrix.commands }}
+  backend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        commands: [ruff, pytest]
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: install dependencies
+        run: make setup
+      - name: ${{ matrix.commands }}
+        run: uv run ${{ matrix.commands }}
+
