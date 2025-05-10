@@ -1,0 +1,48 @@
+name: tests
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+    branches:
+      - "*"
+  merge_group:
+    branches:
+      - "*"
+  push:
+    branches:
+      - "*"
+
+jobs:
+  frontend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        commands: [lint, prettier, jest]
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - name: install dependencies
+        run: make setup
+      - name: ${{ matrix.commands }}
+        run: npm run ${{ matrix.commands }}
+  backend-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        command: [ruff check, pytest]
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv globally
+        run: |
+          curl -Ls https://astral.sh/uv/install.sh | bash
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - name: Sync Python dependencies
+        run: uv sync
+      - name: Run ${{ matrix.command }}
+        run: uv run ${{ matrix.command }}
+
