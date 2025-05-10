@@ -37,11 +37,10 @@ jobs:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v4
-      - name: Run tests
-        run: |
-          export PATH="$GITHUB_WORKSPACE/backend/.venv/bin:$PATH"
       - name: install dependencies
         run: make setup
       - name: ${{ matrix.commands }}
-        run: uv run ${{ matrix.commands }}
+        run: |
+          export PATH="$GITHUB_WORKSPACE/backend/.venv/bin:$PATH"
+          uv run ${{ matrix.commands }}
 
