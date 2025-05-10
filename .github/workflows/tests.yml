@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        command: [ruff, pytest]
+        command: [ruff, pytest check]
     defaults:
       run:
         working-directory: ./backend
