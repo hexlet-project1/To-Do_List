@@ -1,7 +1,7 @@
 [project]
 name = "backend"
 version = "0.1.0"
-description = "Add your description here"
+description = "To-do List Server"
 requires-python = ">=3.10"
 dependencies = [
     "flask>=3.1.0",
