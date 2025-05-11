@@ -1,15 +1,18 @@
 import sys
 import os
+import subprocess
+import time
 from flask import Flask
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'py', 'db')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'py', 'app')))
-from todo_controller import todo_controller
-import subprocess
-import time
+from todo_controller import TodoController
+from db_utils import db_get_connection
+from todo_model import TodoModel
 
 server = Flask(__name__)
-server.register_blueprint(todo_controller)
-
+conn = db_get_connection()
+todo_controller = TodoController(TodoModel(), conn)
+server.register_blueprint(todo_controller.blueprint)
 
 def free_port(port):
   cmd = f"lsof -ti :{port}"

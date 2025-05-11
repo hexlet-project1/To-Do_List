@@ -1,10 +1,12 @@
+from db_init import db_ensure_table
+
 class TodoModel:
-    @classmethod
-    def get_all_todos(cls, conn):
+    @staticmethod
+    def get_all_todos(conn):
         return conn.execute("SELECT * FROM todos ORDER BY id").fetchall()
 
-    @classmethod
-    def add_todo(cls, conn, id, fields):
+    @staticmethod
+    def add_todo(conn, id, fields):
         with conn.cursor() as cur:
             cur.execute("""
                 INSERT INTO todos (id, text, "dueDate", completed)
@@ -18,8 +20,8 @@ class TodoModel:
             conn.commit()
         return True
 
-    @classmethod
-    def update_todo(cls, conn, id, fields, updates,):
+    @staticmethod
+    def update_todo(conn, id, fields, updates,):
         with conn.cursor() as cur:
             cur.execute(f"""
                 UPDATE todos SET {fields}
@@ -28,8 +30,12 @@ class TodoModel:
             conn.commit()
             return cur.rowcount > 0  
 
-    @classmethod
-    def delete_todo(cls,conn, id):
+    @staticmethod
+    def delete_todo(conn, id):
         result = conn.execute("DELETE FROM todos WHERE id = %s", (id,))
         conn.commit()
         return result.rowcount > 0
+
+    @staticmethod
+    def ensure_table(conn):
+        db_ensure_table(conn)

@@ -1,4 +1,4 @@
-def ensure_table(conn):
+def db_ensure_table(conn):
     conn.execute("""
         CREATE TABLE IF NOT EXISTS todos (
             id SERIAL PRIMARY KEY,
