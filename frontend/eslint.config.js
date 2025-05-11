@@ -20,7 +20,10 @@ export default defineConfig([
     },
   },
   {
-    files: ['./__tests__/*.js'],
+    files: [
+      './__tests__/*.js',
+      './jest.setup.js',
+    ],
     languageOptions: {
       globals: {
         ...globals.jest,
