@@ -2,9 +2,11 @@ PG_CMD = sudo -u postgres -H
 
 .PHONY: all setup run install-system install-python install-node install-postgresql configure-db setup-db restart-postgresql install-backend install-frontend run-backend run-frontend
 
-all: install run
+all: setup run
 
-setup: install-system install-python install-node install-postgresql configure-db restart-postgresql setup-db install-backend install-frontend
+setup: install configure-db restart-postgresql setup-db
+
+install: install-system install-python install-node install-backend install-frontend install-postgresql
 
 run: run-frontend
 
