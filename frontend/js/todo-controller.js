@@ -1,19 +1,19 @@
 export default class TodoController {
-  async handleSetDataTodo(text, date) {
+  async handleSetDataTodo(text, dueDate) {
     const trimmedText = text.trim()
     const isDuplicate = this.model.todos.some(
-      todo => todo.text.toLowerCase() === trimmedText.toLowerCase() && todo.dueDate === date,
+      todo => todo.text.toLowerCase() === trimmedText.toLowerCase() && todo.dueDate === dueDate,
     )
     if (this.model.tempId) {
       const id = this.model.currentId
       if (!isDuplicate) {
-        await this.model.updateTodo(id, { text, date })
+        await this.model.updateTodo(id, { text, dueDate })
       }
       this.model.changeEditTodo(id)
     }
     else {
       if (!isDuplicate) {
-        await this.model.addTodo(text, date)
+        await this.model.addTodo(text, dueDate)
       }
     }
     this.model.view.clearForm()

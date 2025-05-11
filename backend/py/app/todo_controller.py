@@ -12,7 +12,7 @@ class TodoController:
         filtered = {key: data[key] for key in data if key in self.allowed_fields}
         if not filtered:
             return None, None
-        fields = ', '.join(f"{field} = %s" for field in filtered)
+        fields = ', '.join(f'"{field}" = %s' for field in filtered)
         values = list(filtered.values())
         return fields, values
     
@@ -28,7 +28,6 @@ class TodoController:
         return '', 201
 
     def update_todo(self, id):
-        print(self, id)
         data = request.json
         fields, values = self.prepare_data(data)
         if not fields:
