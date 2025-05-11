@@ -1,6 +1,9 @@
 setup:
 	npm ci
 
+setup-production:
+	npm install --omit=dev
+
 run:
 	npm start
 
@@ -16,9 +19,9 @@ prettier:
 prettier-fix:
 	npx prettier . --write
 
-check: prettier lint
-
 jest:
 	NODE_OPTIONS=--experimental-vm-modules npx jest
+
+check: prettier lint jest
 
 prepare: lint-fix prettier-fix
