@@ -2,13 +2,18 @@
 
 all: setup run
 
-setup:
+setup: setup-base
+	.venv/bin/uv sync --active
+
+setup-production: setup-base
+	.venv/bin/uv sync --active --no-dev
+
+setup-base:
 	[ -d .venv ] || python3 -m venv .venv
 	. .venv/bin/activate && \
 	pip install --upgrade pip && \
-	pip install uv && \
-	.venv/bin/uv sync --active
-
+	pip install uv
+ 
 run:
 	uv run main.py
 
@@ -18,9 +23,9 @@ ruff:
 ruff-fix:
 	uv run ruff check --fix
 
-check: ruff
-
 pytest:
 	uv run pytest
+
+check: ruff pytest
 
 prepare: ruff-fix
