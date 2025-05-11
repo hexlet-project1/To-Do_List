@@ -1,4 +1,4 @@
-from db_init import db_ensure_table
+from db_utils import db_ensure_table
 
 class TodoModel:
     @staticmethod
