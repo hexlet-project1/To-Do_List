@@ -4,13 +4,13 @@ on:
   pull_request:
     types: [opened, edited, reopened]
     branches-ignore:
-      - 'tests/**'
+      - 'test/**'
   merge_group:
     branches-ignore:
-      - 'tests/**'
+      - 'test/**'
   push:
     branches-ignore:
-      - 'tests/**'
+      - 'test/**'
 
 jobs:
   frontend-test:
