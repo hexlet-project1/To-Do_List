@@ -1,6 +1,6 @@
 import psycopg
 from psycopg.rows import dict_row
-from db_config import DB_CONFIG
+from backend.py.db.db_config import DB_CONFIG
 
 def db_ensure_table(conn):
     conn.execute("""
