@@ -1,9 +1,6 @@
-.PHONY: all setup run ruff ruff-fix check pytest prepare
+.PHONY: all setup-production setup-base run
 
 all: setup run
-
-setup: setup-base
-	.venv/bin/uv sync --active
 
 setup-production: setup-base
 	.venv/bin/uv sync --active --no-dev
@@ -16,23 +13,3 @@ setup-base:
  
 run:
 	uv run main.py
-
-ruff:
-	uv run ruff check
-
-ruff-fix:
-	uv run ruff check --fix
-
-pytest:
-	uv run pytest
-
-safe-tests:
-	@if [ "$(cmd)" = "pytest" ]; then \
-  	uv run pytest || [ $$? -eq 5 ]; \
- 	else \
-  	uv run $(cmd); \
- 	fi
-
-check: ruff pytest
-
-prepare: ruff-fix
