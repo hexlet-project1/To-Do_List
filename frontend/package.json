@@ -7,9 +7,8 @@
     "start": "electron .",
     "lint": "npx eslint .",
     "prettier": "npx prettier . --check",
-    "jest": "npx jest"
+    "jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --passWithNoTests"
   },
-  "jest": "NODE_OPTIONS=--experimental-vm-modules npx jest --passWithNoTests",
   "author": "Saint",
   "license": "ISC",
   "description": "",
