@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from flask import Flask
 from backend.py.app.todo_controller import TodoController 
 
@@ -24,7 +24,11 @@ def mock_todo_model():
 
 @pytest.fixture
 def controller(mock_todo_model, mock_conn):
-    return TodoController(mock_todo_model, mock_conn)
+    # Патчим db_get_connection чтобы возвращал наш mock_conn
+    with patch('backend.py.app.todo_controller.db_get_connection', return_value=mock_conn):
+        # Патчим db_ensure_table чтобы ничего не делал
+        with patch('backend.py.app.todo_controller.db_ensure_table'):
+            return TodoController(conn=mock_conn, todo_model=mock_todo_model)
 
 def test_prepare_data(controller):
     # Тест с валидными полями
@@ -100,8 +104,6 @@ def test_delete_todo_not_found(controller, app):
         assert response[0].json == {'error': 'Задача не найдена'}
 
 def test_register_routes(controller):
-    # Проверяем, что все маршруты зарегистрированы правильно
-    # Вместо прямого доступа к url_map, проверим наличие правил через app
     app = Flask(__name__)
     app.register_blueprint(controller.blueprint)
     
