@@ -24,20 +24,16 @@ def mock_todo_model():
 
 @pytest.fixture
 def controller(mock_todo_model, mock_conn):
-    # Патчим db_get_connection чтобы возвращал наш mock_conn
     with patch('backend.py.app.todo_controller.db_get_connection', return_value=mock_conn):
-        # Патчим db_ensure_table чтобы ничего не делал
         with patch('backend.py.app.todo_controller.db_ensure_table'):
             return TodoController(conn=mock_conn, todo_model=mock_todo_model)
 
 def test_prepare_data(controller):
-    # Тест с валидными полями
     data = {'text': 'Test', 'dueDate': '2023-01-01', 'invalid': 'should be ignored'}
     fields, values = controller.prepare_data(data)
     assert fields == '"text" = %s, "dueDate" = %s'
     assert values == ['Test', '2023-01-01']
     
-    # Тест без валидных полей
     data = {'invalid': 'should be ignored'}
     fields, values = controller.prepare_data(data)
     assert fields is None
