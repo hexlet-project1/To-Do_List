@@ -22,6 +22,13 @@ prettier-fix:
 jest:
 	NODE_OPTIONS=--experimental-vm-modules npx jest
 
+safe-tests:
+	@if ! npm run | grep -q "$(cmd)"; then \
+  	echo "No such npm script: $(cmd). Failing."; \
+  	exit 1; \
+ 	fi
+	npm run $(cmd)
+
 check: prettier lint jest
 
 prepare: lint-fix prettier-fix
