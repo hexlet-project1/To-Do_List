@@ -27,6 +27,8 @@ safe-tests:
 		echo "Command $(cmd) succeeded."; \
 	else \
   	echo "Command $(cmd) failed. Check logs."; \
+  	exit 1; \
+ 	fi
 
 check: prettier lint jest
 
