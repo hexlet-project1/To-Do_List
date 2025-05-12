@@ -26,13 +26,6 @@ ruff-fix:
 pytest:
 	uv run pytest
 
-safe-tests:
-	@if [ "$(cmd)" = "pytest" ]; then \
-  	uv run pytest || [ $$? -eq 5 ]; \
- 	else \
-  	uv run $(cmd); \
- 	fi
-
 check: ruff pytest
 
 prepare: ruff-fix
