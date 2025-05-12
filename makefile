@@ -6,11 +6,7 @@ all: setup run
 
 setup: install configure-db restart-postgresql setup-db
 
-setup-dev: install-dev configure-db restart-postgresql setup-db
-
 install: install-system install-python install-node install-backend install-frontend install-postgresql
-
-install-dev: install-system install-python install-node install-backend-dev install-frontend-dev install-postgresql
 
 run: run-frontend
 
@@ -50,13 +46,6 @@ install-backend:
 
 install-frontend:
 	cd frontend && [ -d node_modules ] || make setup-production
-
-install-backend-dev:
-	cd backend && \
-	make setup
-
-install-frontend-dev:
-	cd frontend && make setup
 
 run-backend:
 	nohup sh -c 'cd backend && . .venv/bin/activate && uv run main.py' > /dev/null 2>&1 &
