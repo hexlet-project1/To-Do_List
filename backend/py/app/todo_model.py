@@ -1,4 +1,4 @@
-from db_utils import db_ensure_table
+from backend.py.db.db_utils import db_ensure_table
 
 class TodoModel:
     @staticmethod
