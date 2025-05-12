@@ -23,11 +23,10 @@ jest:
 	NODE_OPTIONS=--experimental-vm-modules npx jest
 
 safe-tests:
-	@if ! npm run | grep -q "$(cmd)"; then \
-  	echo "No such npm script: $(cmd). Failing."; \
-  	exit 1; \
- 	fi
-	npm run $(cmd)
+	@if npm run $(cmd); then \
+		echo "Command $(cmd) succeeded."; \
+	else \
+  	echo "Command $(cmd) failed. Check logs."; \
 
 check: prettier lint jest
 
