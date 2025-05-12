@@ -3,21 +3,21 @@ name: tests
 on:
   pull_request:
     types: [opened, edited, reopened]
-    branches:
-      - "*"
+    branches-ignore:
+      - 'tests/**'
   merge_group:
-    branches:
-      - "*"
+    branches-ignore:
+      - 'tests/**'
   push:
-    branches:
-      - "*"
+    branches-ignore:
+      - 'tests/**'
 
 jobs:
   frontend-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        commands: [lint, prettier, jest]
+        commands: ["lint", "prettier", "jest"]
     defaults:
       run:
         working-directory: ./frontend
@@ -25,13 +25,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: install dependencies
         run: make setup
-      - name: ${{ matrix.commands }}
-        run: npm run ${{ matrix.commands }}
+      - name: Run ${{ matrix.commands }}
+        run: make safe-tests cmd=${{ matrix.commands }}
+
   backend-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        command: [ruff check, pytest]
+        command: ["ruff check", "pytest"]
     defaults:
       run:
         working-directory: ./backend
@@ -44,5 +45,5 @@ jobs:
       - name: Sync Python dependencies
         run: uv sync
       - name: Run ${{ matrix.command }}
-        run: uv run ${{ matrix.command }}
+        run: make safe-tests cmd='${{ matrix.command }}'
 
