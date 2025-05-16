@@ -7,6 +7,7 @@ class TodoController:
         self.register_routes()
         self.allowed_fields = ['id', 'text', 'dueDate', 'completed']
         self.todo_model = todo_model
+        self.todo_model.ensure_table(conn)
 
     def prepare_data(self, data):
         filtered = {key: data[key] for key in data if key in self.allowed_fields}
