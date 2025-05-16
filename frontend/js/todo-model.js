@@ -155,8 +155,4 @@ export default class TodoModel {
         return [...this.todos]
     }
   }
-
-  setEditingId(id) {
-    this.editingId = id
-  }
 }

@@ -1,4 +1,6 @@
 PG_CMD = sudo -u postgres -H
+BACKUP_SCRIPT=$(shell pwd)/backend/py/db/db_utils.py
+PYTHON_PATH=$(shell which python3)
 
 .PHONY: all setup run install-system install-python install-node install-postgresql configure-db setup-db restart-postgresql install-backend install-frontend run-backend run-frontend
 
@@ -39,6 +41,10 @@ setup-db:
 	$(PG_CMD) psql -tAc "SELECT 1 FROM pg_database WHERE datname='todo_db'" | grep -q 1 || \
 	$(PG_CMD) psql -c "CREATE DATABASE todo_db OWNER todo_user;"
 	$(PG_CMD) psql -c "GRANT ALL PRIVILEGES ON DATABASE todo_db TO todo_user;"
+
+set-backups:
+	@crontab -l 2>/dev/null | grep -F "$(PYTHON_PATH) $(BACKUP_SCRIPT)" >/dev/null || \
+	(crontab -l 2>/dev/null; echo "0 2 * * * $(PYTHON_PATH) $(BACKUP_SCRIPT)") | crontab -
 
 install-backend:
 	cd backend && \
