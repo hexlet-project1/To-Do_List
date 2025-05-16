@@ -7,13 +7,13 @@ export default class TodoController {
     if (this.model.tempId) {
       const id = this.model.currentId
       if (!isDuplicate) {
-        await this.model.updateTodo(id, { text, dueDate })
+        await this.model.updateTodo(id, { text: trimmedText, dueDate }) // Исправлено: используем trimmedText
       }
       this.model.changeEditTodo(id)
     }
     else {
       if (!isDuplicate) {
-        await this.model.addTodo(text, dueDate)
+        await this.model.addTodo(trimmedText, dueDate) // Исправлено: используем trimmedText
       }
     }
     this.model.view.clearForm()
