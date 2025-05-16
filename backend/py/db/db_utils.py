@@ -1,3 +1,6 @@
+import os
+import subprocess
+from datetime import datetime
 import psycopg
 from psycopg.rows import dict_row
 from db_config import DB_CONFIG
@@ -37,7 +40,7 @@ def create_backup():
 
     env = os.environ.copy()
     env["PGPASSWORD"] = DB_PASS
-    
+
     try:
         subprocess.run(cmd, check=True, env=env)
     except subprocess.CalledProcessError:
@@ -75,7 +78,7 @@ def recover_if_broken():
         with db_get_connection() as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT 1 FROM todos LIMIT 1;")
-    except Exception as e:
+    except Exception:
         restore_backup()
 
 if __name__ == "__main__":
