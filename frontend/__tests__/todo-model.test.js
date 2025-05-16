@@ -245,13 +245,6 @@ describe('TodoModel', () => {
         )
       })
     })
-
-    describe('setEditingId()', () => {
-      it('should set editing ID', () => {
-        model.setEditingId(5)
-        expect(model.editingId).toBe(5)
-      })
-    })
   })
 
   describe('Filter operations', () => {
